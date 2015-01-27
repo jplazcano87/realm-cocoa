@@ -544,10 +544,11 @@
 			inputPaths = (
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/RealmSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ../../../\nif [[ ! -d \"ios/RealmSwift.framework\" && ! -d \"build/ios/RealmSwift.framework\" ]]; then\n    sh build.sh ios\nfi";
+			shellScript = "cd ../../../\nif [[ ! -d \"ios/RealmSwift.framework\" && ! -d \"${CONFIGURATION_BUILD_DIR}/RealmSwift.framework\" ]]; then\n    sh build.sh ios\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

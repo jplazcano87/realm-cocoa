@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0201B2661A54C68C004CFB6F"
-               BuildableName = "RealmSwift.framework"
-               BlueprintName = "RealmSwift OSX"
-               ReferencedContainer = "container:Realm.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0201B27D1A54C697004CFB6F"
-               BuildableName = "RealmSwift OSX Tests.xctest"
-               BlueprintName = "RealmSwift OSX Tests"
+               BlueprintIdentifier = "29E3C7041A71C1C700B62C1D"
+               BuildableName = "Realm.framework"
+               BlueprintName = "iOS Dynamic"
                ReferencedContainer = "container:Realm.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0201B27D1A54C697004CFB6F"
-               BuildableName = "RealmSwift OSX Tests.xctest"
-               BlueprintName = "RealmSwift OSX Tests"
+               BlueprintIdentifier = "026B0F041A780680005E26C8"
+               BuildableName = "iOS Tests copy.xctest"
+               BlueprintName = "iOS Dynamic Tests"
                ReferencedContainer = "container:Realm.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -56,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0201B2661A54C68C004CFB6F"
-            BuildableName = "RealmSwift.framework"
-            BlueprintName = "RealmSwift OSX"
+            BlueprintIdentifier = "29E3C7041A71C1C700B62C1D"
+            BuildableName = "Realm.framework"
+            BlueprintName = "iOS Dynamic"
             ReferencedContainer = "container:Realm.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -75,9 +61,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0201B2661A54C68C004CFB6F"
-            BuildableName = "RealmSwift.framework"
-            BlueprintName = "RealmSwift OSX"
+            BlueprintIdentifier = "29E3C7041A71C1C700B62C1D"
+            BuildableName = "Realm.framework"
+            BlueprintName = "iOS Dynamic"
             ReferencedContainer = "container:Realm.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -93,9 +79,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0201B2661A54C68C004CFB6F"
-            BuildableName = "RealmSwift.framework"
-            BlueprintName = "RealmSwift OSX"
+            BlueprintIdentifier = "29E3C7041A71C1C700B62C1D"
+            BuildableName = "Realm.framework"
+            BlueprintName = "iOS Dynamic"
             ReferencedContainer = "container:Realm.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
