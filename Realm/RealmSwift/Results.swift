@@ -54,10 +54,10 @@ public final class Results<T: Object>: Printable, SequenceType {
 
     // MARK: Properties
 
-    let rlmResults: RLMResults
+    internal let rlmResults: RLMResults
 
     /// Returns the Realm these results are associated with.
-    public var realm: Realm { return Realm(rlmRealm: rlmResults.realm) }
+    public var realm: Realm { return Realm(rlmResults.realm) }
 
     /// Returns a human-readable description of the objects contained in these results.
     public var description: String { return rlmResults.description }
@@ -67,7 +67,7 @@ public final class Results<T: Object>: Printable, SequenceType {
 
     // MARK: Initializers
 
-    init(_ rlmResults: RLMResults) {
+    internal init(_ rlmResults: RLMResults) {
         self.rlmResults = rlmResults
     }
 
@@ -164,7 +164,18 @@ public final class Results<T: Object>: Printable, SequenceType {
     :returns: `Results` with elements sorted by the given property name.
     */
     public func sorted(property: String, ascending: Bool = true) -> Results<T> {
-        return Results<T>(rlmResults.sortedResultsUsingProperty(property, ascending: ascending))
+        return sorted([SortDescriptor(property: property, ascending: ascending)])
+    }
+
+    /**
+    Returns `Results` with elements sorted by the given sort descriptors.
+
+    :param: sortDescriptors `SortDescriptor`s to sort by.
+
+    :returns: `Results` with elements sorted by the given sort descriptors.
+    */
+    public func sorted(sortDescriptors: [SortDescriptor]) -> Results<T> {
+        return Results<T>(rlmResults.sortedResultsUsingDescriptors(sortDescriptors.map { $0.rlmSortDescriptorValue }))
     }
 
     // MARK: Aggregate Operations
@@ -178,8 +189,8 @@ public final class Results<T: Object>: Printable, SequenceType {
 
     :returns: The minimum value for the property amongst objects in the Results, or `nil` if the Results is empty.
     */
-    public func min<U: MinMaxType>(property: String) -> U {
-        return rlmResults.minOfProperty(property) as U
+    public func min<U: MinMaxType>(property: String) -> U? {
+        return rlmResults.minOfProperty(property) as U?
     }
 
     /**
@@ -191,8 +202,8 @@ public final class Results<T: Object>: Printable, SequenceType {
 
     :returns: The maximum value for the property amongst objects in the Results, or `nil` if the Results is empty.
     */
-    public func max<U: MinMaxType>(property: String) -> U {
-        return rlmResults.maxOfProperty(property) as U
+    public func max<U: MinMaxType>(property: String) -> U? {
+        return rlmResults.maxOfProperty(property) as U?
     }
 
     /**

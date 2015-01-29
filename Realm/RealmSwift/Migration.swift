@@ -102,18 +102,58 @@ public func setSchemaVersion(schemaVersion: UInt, realmPath: String, migrationBl
 }
 
 /**
+Get the schema version for a Realm at a given path.
+
+:param: realmPath Path to a Realm file.
+:param: error     If an error occurs, upon return contains an `NSError` object
+                  that describes the problem. If you are not interested in
+                  possible errors, omit the argument, or pass in `nil`.
+
+:returns: The version of the Realm at `realmPath` or `nil` if the version cannot be read.
+*/
+public func schemaVersionAtPath(realmPath: String, error: NSErrorPointer = nil) -> UInt? {
+    let version = RLMRealm.schemaVersionAtPath(realmPath, error: error)
+    if version == RLMNotVersioned {
+        return nil
+    }
+    return version
+}
+
+/**
+Get the schema version for an encrypted Realm at a given path.
+
+:param: realmPath     Path to a Realm file.
+:param: encryptionKey 64-byte encryption key.
+:param: error         If an error occurs, upon return contains an `NSError` object
+                      that describes the problem. If you are not interested in
+                      possible errors, omit the argument, or pass in `nil`.
+
+:returns: The version of the Realm at `realmPath` or `nil` if the version cannot be read.
+*/
+public func schemaVersionAtPath(realmPath: String, encryptionKey: NSData, error: NSErrorPointer = nil) -> UInt? {
+    let version = RLMRealm.schemaVersionAtPath(realmPath, encryptionKey: encryptionKey, error: error)
+    if version == RLMNotVersioned {
+        return nil
+    }
+    return version
+}
+
+/**
 Performs the registered migration block on a Realm at the given path.
 
 This method is called automatically when opening a Realm for the first time and does
 not need to be called explicitly. You can choose to call this method to control
 exactly when and how migrations are performed.
 
-:param: path The path of the Realm to migrate.
+:param: path          The path of the Realm to migrate.
+:param: encryptionKey 64-byte encryption key if Realms at the given path are encrypted.
+                      If the Realms at the given path are not encrypted, omit the argument or pass
+                      in `nil`.
 
 :returns: `nil` if the migration was successful, or an `NSError` object that describes the problem
           that occured otherwise.
 */
-public func migrateRealm(path: String) -> NSError? {
+public func migrateRealm(path: String, encryptionKey: NSData? = nil) -> NSError? {
     return RLMRealm.migrateRealmAtPath(path)
 }
 
@@ -123,15 +163,15 @@ of a `Realm` instance.
 
 This object provides access to the previous and current `Schema`s for this migration.
 */
-public class Migration {
+public final class Migration {
 
     // MARK: Properties
 
     /// The migration's old `Schema`, describing the `Realm` before applying a migration.
-    public var oldSchema: Schema { return Schema(rlmSchema: rlmMigration.oldSchema) }
+    public var oldSchema: Schema { return Schema(rlmMigration.oldSchema) }
 
     /// The migration's new `Schema`, describing the `Realm` after applying a migration.
-    public var newSchema: Schema { return Schema(rlmSchema: rlmMigration.newSchema) }
+    public var newSchema: Schema { return Schema(rlmMigration.newSchema) }
 
     private var rlmMigration: RLMMigration
 
@@ -176,26 +216,34 @@ public class Migration {
 
     :param: object Object to be deleted from the Realm being migrated.
     */
-    public func delete(object: RLMObject) {
-        rlmMigration.deleteObject(object)
+    public func delete(object: MigrationObject) {
+        rlmMigration.deleteObject(unsafeBitCast(object, RLMObject.self))
     }
 
-    init(_ rlmMigration: RLMMigration) {
+    private init(_ rlmMigration: RLMMigration) {
         self.rlmMigration = rlmMigration
     }
 }
 
 /// Object interface which allows untyped getters and setters for Objects during a migration.
-public class MigrationObject : Object {
+public final class MigrationObject: Object {
 
     private var listProperties = [String: List<Object>]()
 
-    /// Returns the value of the property with the given name.
-    subscript(key: String) -> AnyObject? {
-        if (self.objectSchema[key].type == RLMPropertyType.Array) {
-            return listProperties[key]
+    /// Returns or sets the value of the property with the given name.
+    public override subscript(key: String) -> AnyObject? {
+        get {
+            if self.objectSchema[key].type == .Array {
+                return listProperties[key]
+            }
+            return super[key]
         }
-        return super[key]
+        set {
+            if self.objectSchema[key].type != .Array {
+                super[key] = newValue
+            }
+            // FIXME: Implement List property setter
+        }
     }
 
     /**
